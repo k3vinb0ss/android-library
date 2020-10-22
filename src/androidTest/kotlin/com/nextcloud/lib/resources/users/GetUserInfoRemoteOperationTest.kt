@@ -56,7 +56,7 @@ class GetUserInfoRemoteOperationTest : AbstractIT() {
         client.credentials = OwnCloudBasicCredentials("user2", "user2")
         val userInfoResult = GetUserInfoRemoteOperation().execute(client)
         assertTrue(userInfoResult.isSuccess)
-        val userInfo = userInfoResult.data[0] as UserInfo
+        val userInfo = userInfoResult.singleData
 
         assertEquals("User Two", userInfo.getDisplayName())
         assertEquals("user2", userInfo.getId())

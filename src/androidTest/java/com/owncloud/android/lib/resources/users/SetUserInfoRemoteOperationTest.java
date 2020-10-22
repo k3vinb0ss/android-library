@@ -39,9 +39,9 @@ import static org.junit.Assert.assertTrue;
 public class SetUserInfoRemoteOperationTest extends AbstractIT {
     @Test
     public void testSetEmail() {
-        RemoteOperationResult userInfo = new GetUserInfoRemoteOperation().execute(client);
+        RemoteOperationResult<UserInfo> userInfo = new GetUserInfoRemoteOperation().execute(client);
         assertTrue(userInfo.isSuccess());
-        String oldValue = ((UserInfo) userInfo.getData().get(0)).getEmail();
+        String oldValue = userInfo.getSingleData().getEmail();
 
         // set
         assertTrue(new SetUserInfoRemoteOperation(SetUserInfoRemoteOperation.Field.EMAIL, "new@mail.com")
@@ -58,11 +58,11 @@ public class SetUserInfoRemoteOperationTest extends AbstractIT {
 
     @Test
     public void testSetDisplayName() {
-        RemoteOperationResult userInfo = new GetUserInfoRemoteOperation().execute(client);
+        RemoteOperationResult<UserInfo> userInfo = new GetUserInfoRemoteOperation().execute(client);
         assertTrue(userInfo.isSuccess());
 
         String oldUserId = client.getUserId();
-        assertEquals(client.getUserId(), ((UserInfo) userInfo.getData().get(0)).displayName);
+        assertEquals(client.getUserId(), userInfo.getSingleData().displayName);
 
         // set display name
         assertTrue(new SetUserInfoRemoteOperation(SetUserInfoRemoteOperation.Field.DISPLAYNAME, "newName")
@@ -70,7 +70,7 @@ public class SetUserInfoRemoteOperationTest extends AbstractIT {
 
         userInfo = new GetUserInfoRemoteOperation().execute(client);
         assertTrue(userInfo.isSuccess());
-        assertEquals("newName", ((UserInfo) userInfo.getData().get(0)).displayName);
+        assertEquals("newName", userInfo.getSingleData().displayName);
 
         // reset
         assertTrue(new SetUserInfoRemoteOperation(SetUserInfoRemoteOperation.Field.DISPLAYNAME, oldUserId)
@@ -79,9 +79,9 @@ public class SetUserInfoRemoteOperationTest extends AbstractIT {
 
     @Test
     public void testSetPhone() {
-        RemoteOperationResult userInfo = new GetUserInfoRemoteOperation().execute(client);
+        RemoteOperationResult<UserInfo> userInfo = new GetUserInfoRemoteOperation().execute(client);
         assertTrue(userInfo.isSuccess());
-        String oldValue = ((UserInfo) userInfo.getData().get(0)).phone;
+        String oldValue = userInfo.getSingleData().phone;
 
         // set
         assertTrue(new SetUserInfoRemoteOperation(SetUserInfoRemoteOperation.Field.PHONE, "555-12345")

@@ -82,7 +82,7 @@ class NextcloudClient(var baseUri: Uri,
                 credentials: String,
                 context: Context) : this(baseUri, userId, credentials, createDefaultClient(context))
    
-    fun execute(remoteOperation: RemoteOperation): RemoteOperationResult {
+    fun <T> execute(remoteOperation: RemoteOperation<T>): RemoteOperationResult<T> {
         return try {
             remoteOperation.run(this)
         } catch (ex: Exception) {

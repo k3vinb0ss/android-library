@@ -24,7 +24,6 @@
 package com.nextcloud.android.lib.resources.directediting;
 
 import com.google.gson.reflect.TypeToken;
-import com.owncloud.android.lib.common.DirectEditing;
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.utils.Log_OC;
@@ -38,7 +37,7 @@ import org.apache.commons.httpclient.methods.GetMethod;
  * Get all editor details from direct editing
  */
 
-public class DirectEditingObtainRemoteOperation extends OCSRemoteOperation {
+public class DirectEditingObtainRemoteOperation<DirectEditing> extends OCSRemoteOperation<DirectEditing> {
     private static final String TAG = DirectEditingObtainRemoteOperation.class.getSimpleName();
     private static final int SYNC_READ_TIMEOUT = 40000;
     private static final int SYNC_CONNECTION_TIMEOUT = 5000;
@@ -46,8 +45,8 @@ public class DirectEditingObtainRemoteOperation extends OCSRemoteOperation {
 
     private static final String JSON_FORMAT = "?format=json";
 
-    protected RemoteOperationResult run(OwnCloudClient client) {
-        RemoteOperationResult result;
+    protected RemoteOperationResult<DirectEditing> run(OwnCloudClient client) {
+        RemoteOperationResult<DirectEditing> result;
         GetMethod getMethod = null;
 
         try {
@@ -64,16 +63,16 @@ public class DirectEditingObtainRemoteOperation extends OCSRemoteOperation {
                         })
                         .getOcs().getData();
 
-                result = new RemoteOperationResult(true, getMethod);
+                result = new RemoteOperationResult<>(true, getMethod);
                 result.setSingleData(directEditing);
             } else {
-                result = new RemoteOperationResult(false, getMethod);
+                result = new RemoteOperationResult<>(false, getMethod);
                 client.exhaustResponse(getMethod.getResponseBodyAsStream());
             }
         } catch (Exception e) {
-            result = new RemoteOperationResult(e);
+            result = new RemoteOperationResult<>(e);
             Log_OC.e(TAG, "Get all direct editing informations failed: " + result.getLogMessage(),
-                    result.getException());
+                     result.getException());
         } finally {
             if (getMethod != null) {
                 getMethod.releaseConnection();

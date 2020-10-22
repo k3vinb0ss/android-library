@@ -56,7 +56,6 @@ import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
@@ -68,14 +67,13 @@ import okhttp3.Headers;
 
 /**
  * The result of a remote operation required to an ownCloud server.
- *
- * Provides a common classification of remote operation results for all the
- * application.
+ * <p>
+ * Provides a common classification of remote operation results for all the application.
  *
  * @author David A. Velasco
  */
 @ToString
-public class RemoteOperationResult implements Serializable {
+public class RemoteOperationResult<T extends Object> implements Serializable {
 
     // Generated - should be refreshed every time the class changes!!
     private static final long serialVersionUID = -1909603208238358633L;
@@ -154,6 +152,7 @@ public class RemoteOperationResult implements Serializable {
     @ToString.Exclude private String mLastPermanentLocation = null;
 
     @ToString.Exclude private ArrayList<Object> mData;
+    @ToString.Exclude private T singleData;
     @ToString.Exclude private List<Notification> mNotificationData;
     @ToString.Exclude private PushResponse mPushResponse;
 
@@ -467,8 +466,8 @@ public class RemoteOperationResult implements Serializable {
                 default:
                     mCode = ResultCode.UNHANDLED_HTTP_CODE;         // UNKNOWN ERROR
                     Log_OC.d(TAG,
-                            "RemoteOperationResult has processed UNHANDLED_HTTP_CODE: "
-                                    + mHttpCode + " " + mHttpPhrase);
+                             "RemoteOperationResult has processed UNHANDLED_HTTP_CODE: "
+                                     + mHttpCode + " " + mHttpPhrase);
             }
         }
     }
@@ -477,16 +476,16 @@ public class RemoteOperationResult implements Serializable {
         mData = files;
     }
 
-    public void setSingleData(Object object) {
-        mData = new ArrayList<>(Collections.singletonList(object));
+    public void setSingleData(T object) {
+        singleData = object;
     }
 
     public ArrayList<Object> getData() {
         return mData;
     }
 
-    public Object getSingleData() {
-        return mData.get(0);
+    public T getSingleData() {
+        return singleData;
     }
 
     public void setNotificationData(List<Notification> notifications) {
@@ -496,6 +495,7 @@ public class RemoteOperationResult implements Serializable {
     public PushResponse getPushResponseData() {
         return mPushResponse;
     }
+
     public void setPushResponseData(PushResponse pushResponseData) {
         mPushResponse = pushResponseData;
     }
