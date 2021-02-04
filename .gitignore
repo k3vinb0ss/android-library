@@ -16,7 +16,7 @@ target/
 *.iml
 
 # Local configuration files (sdk path, etc)
-.idea/
+.idea
 .gradle/
 local.properties
 sample_client/local.properties
